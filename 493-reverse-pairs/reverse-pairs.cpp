@@ -1,19 +1,9 @@
 class Solution {
-    public:
-    int merge(vector<int>& nums, int l, int m, int r) {
-        int ans = 0;
-        int j = m + 1;
+public:
 
-        for(int i = l; i <= m; i++) {
-            while(j <= r && nums[i] > 2LL * nums[j])
-            j++;
-
-            ans += j - (m + 1);
-        }
-
+    void merge(vector<int>& nums, int l, int m, int r) {
         vector<int> v;
-        int i = l;
-        j = m + 1;
+        int i = l, j = m + 1;
 
         while(i <= m && j <= r) {
             if(nums[i] <= nums[j]) {
@@ -38,27 +28,37 @@ class Solution {
 
         for(int i = l; i <= r; i++)
         nums[i] = v[i - l];
-
-        return ans;
     }
-
+       
     int solve(vector<int>& nums, int l, int r) {
-        if(l >= r)
-        return 0;
+        if(l >= r){
+            return 0;
+        }
 
-        int m = l + (r - l) / 2;
+        int m = (l + r) / 2;
 
-        int ans = 0;
-
-        ans += solve(nums, l, m);
+        int ans = solve(nums, l, m);
         ans += solve(nums, m + 1, r);
-        ans += merge(nums, l, m, r);
+
+        int j = m + 1;
+
+        for(int i = l; i <= m; i++) {
+            while(j <= r && nums[i] > 2LL * nums[j])
+            j++;
+
+            ans += j - (m + 1);
+        }
+
+        merge(nums, l, m, r);
 
         return ans;
     }
+
+
+    
 
     int reversePairs(vector<int>& nums) {
-        return solve(nums, 0, nums.size() - 1);
+       
+       return solve(nums , 0 , nums.size() - 1);
     }
 };
-   
